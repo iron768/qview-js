@@ -17,6 +17,8 @@ class PrinterApi {
         this.fabricatorController = new FabricatorController(this)
 
         this.setupControllerRoutes()
+
+        this.fabricatorRepository.setupTestFabricators()
     }
 
     getExpressInstance() {

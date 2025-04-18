@@ -1,3 +1,5 @@
+const Fabricator = require('../model/Fabricator.js')
+
 class FabricatorRepository {
 
     constructor() {
@@ -24,6 +26,18 @@ class FabricatorRepository {
         this.fabricators = this.fabricators.filter(fabricator => fabricator.id !== id)
     }
 
+    setupTestFabricators() {
+        // id, description, hwid, model, name, date, devicePort
+        this.fabricators.push(new Fabricator(1, 'a real life fabricator', 'hwid more like deez', '3d blaster 3000', 'cool', new Date(), '/dev/EMU'))
+    }
+
+    connectPrinter(id) {
+        const printer = this.fabricators.find(fabricator => fabricator.id === id)
+
+        console.log(printer.devicePort)
+
+        printer.setupSerialPort()
+    }
 }
 
 module.exports = FabricatorRepository

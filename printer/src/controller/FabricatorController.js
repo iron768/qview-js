@@ -12,6 +12,8 @@ class FabricatorController {
     setupRouters() {
         this.router.get('/', this.getAllFabricators.bind(this))
         this.router.get('/:id', this.getFabricatorById.bind(this))
+        
+        this.router.put('/:id', this.connectPrinter.bind(this))
     }
 
     getAllFabricators(request, response, next) {
@@ -26,7 +28,7 @@ class FabricatorController {
     }
 
     getFabricatorById(request, response, next) {
-        const fabricatorId = request.params.id
+        const fabricatorId = +request.params.id
 
         if (!fabricatorId) {
             const result = {
@@ -53,6 +55,29 @@ class FabricatorController {
         const result = {
             status: 'success',
             data: fabricator
+        }
+
+        response.send(result)
+    }
+
+    connectPrinter(request, response, next) {
+        const fabricatorId = +request.params.id
+
+        if (!fabricatorId) {
+            const result = {
+                status: 'error',
+                data: 'No fabricator id provided'
+            }
+    
+            response.send(result)
+            return
+        }
+
+        this.printerApi.fabricatorRepository.connectPrinter(fabricatorId)
+
+        const result = {
+            status: 'success',
+            data: 'Printer connected'
         }
 
         response.send(result)
