@@ -1,3 +1,4 @@
+const { SerialPort } = require('serialport')
 
 class Fabricator {
 
@@ -9,6 +10,12 @@ class Fabricator {
         this.name = name
         this.date = date
         this.devicePort = devicePort
+    }
+
+    setupSerialPort(config = {}) {
+        config.baudrate = 57600
+
+        this.serialPort = new SerialPort(this.devicePort, config.baudrate)
     }
 
 }
