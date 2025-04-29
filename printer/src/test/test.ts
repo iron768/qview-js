@@ -1,5 +1,5 @@
-const { SerialPortMock } = require('serialport')
-const readline = require('readline')
+import { SerialPortMock } from 'serialport'
+import readline from 'readline'
 
 const path = '/dev/EMU'
 
