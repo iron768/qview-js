@@ -1,33 +1,34 @@
-const express = require('express')
+import express, { Request, Response, NextFunction, Router } from 'express'
+import PrinterApi from '../PrinterApi'
 
 class FabricatorController {
+    
+    private printerApi: PrinterApi
+    private router: Router
 
-    constructor(printerApi) {
+    constructor(printerApi: PrinterApi) {
         this.printerApi = printerApi
         this.router = express.Router()
 
         this.setupRouters()
     }
 
-    setupRouters() {
+    setupRouters(): void {
         this.router.get('/', this.getAllFabricators.bind(this))
         this.router.get('/:id', this.getFabricatorById.bind(this))
-        
         this.router.put('/:id', this.connectPrinter.bind(this))
     }
 
-    getAllFabricators(request, response, next) {
+    getAllFabricators(request: Request, response: Response, next: NextFunction): void {
         const result = {
             status: 'success',
             data: this.printerApi.fabricatorRepository.getFabricators()
         }
 
         response.send(result)
-
-        return
     }
 
-    getFabricatorById(request, response, next) {
+    getFabricatorById(request: Request, response: Response, next: NextFunction): void {
         const fabricatorId = +request.params.id
 
         if (!fabricatorId) {
@@ -60,7 +61,7 @@ class FabricatorController {
         response.send(result)
     }
 
-    connectPrinter(request, response, next) {
+    connectPrinter(request: Request, response: Response, next: NextFunction): void {
         const fabricatorId = +request.params.id
 
         if (!fabricatorId) {
@@ -73,7 +74,17 @@ class FabricatorController {
             return
         }
 
-        this.printerApi.fabricatorRepository.connectPrinter(fabricatorId)
+        const connected = this.printerApi.fabricatorRepository.connectPrinter(fabricatorId)
+        
+        if (!connected) {
+            const result = {
+                status: 'error',
+                data: 'Failed to connect printer'
+            }
+    
+            response.send(result)
+            return
+        }
 
         const result = {
             status: 'success',
@@ -83,10 +94,9 @@ class FabricatorController {
         response.send(result)
     }
 
-    getRouter() {
+    getRouter(): Router {
         return this.router
     }
-
 }
 
-module.exports = FabricatorController
+export default FabricatorController

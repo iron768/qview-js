@@ -1,5 +1,5 @@
-const express = require('express')
-const PrinterApi = require('./PrinterApi.js')
+import express from 'express'
+import PrinterApi from './PrinterApi'
 
 const app = express()
 
